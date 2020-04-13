@@ -1,6 +1,6 @@
 # myshelf
 
-A new Flutter project.
+A new Flutter project. Book shelf app.
 
 ## Getting Started
 
