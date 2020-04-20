@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:myshelf/screens/addBookPage.dart';
+import 'package:myshelf/screens/homePage.dart';
+import 'package:myshelf/screens/profilePage.dart';
 
 void main() => runApp(MyApp());
 
@@ -7,46 +10,59 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      home: MyHomePage(),
+      routes: <String, WidgetBuilder>{
+      '/': (context) => MyBottomNavBar(),
+      '/addbookpage': (context) => AddBookPage(),
+    },
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyBottomNavBar extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyBottomNavBarState createState() => _MyBottomNavBarState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  List a = [Colors.red, Colors.blue, Colors.black, Colors.pink, Colors.green];
+class _MyBottomNavBarState extends State<MyBottomNavBar> {
+  int _currentIndex = 0;
+  final List<Widget> _pageList = [
+    HomePage(),
+    ProfilePage()
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Image(
-          image: AssetImage("assets/shelf.png"),
-        ),
-        Positioned(
-            left: 80.0,
-            top: 100.0,
-            child: Container(
-              height: 200.0,
-              width: 300.0,
-              child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 5,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      constraints: BoxConstraints.tightForFinite(height: 10.0,width: 50.0),
-                      height: 10.0,
-                      width: 50.0,
-                      color: a[index],
-                    );
-                  }),
-            ),)
-      ],
+    return Scaffold(
+      body: _pageList[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        fixedColor: Colors.black,
+        onTap: _onItemTapped,
+        currentIndex: _currentIndex,
+        backgroundColor: Colors.red,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            title: Text("Home"),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            title: Text("Profile"),
+          )
+        ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {Navigator.pushNamed(context, "/addbookpage") ;},
+      ),
     );
   }
 }
